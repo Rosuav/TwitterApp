@@ -16,6 +16,7 @@ def get_request_token():
 	request_token = credentials.get("oauth_token")[0]
 	request_secret = credentials.get("oauth_token_secret")[0]
 	return request_token,request_secret
+	print status
 	
 def authorize():
 	""" A complete OAuth authentication flow """
