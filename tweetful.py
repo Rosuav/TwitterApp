@@ -4,35 +4,39 @@ import requests
 import sys
 import argparse
 import gettwitter
+import logging
+from apicalls import *
 from urls import *
-def main():
-	parser = argparse.ArgumentParser(description='Interact with twitterAPI')
-	parser.add_argument('-twitter', help='Add this switch to show your retweets. Options are status,myretweets,followers,favorites,hometimeline', nargs='?')
-	args = parser.parse_args()
-	for arg in sys.argv:
-		if sys.argv[2] == "status":
-			arg = "/1.1/statuses/lookup.json"
-		elif sys.argv[2] == "myretweets":
-			arg = "/1.1/statuses/retweets_of_me.json"
-		elif sys.argv[2] == "followers":
-			arg = "/1.1/followers/list.json"
-		elif sys.argv[2] == "myretweets":
-			arg = "/1.1/statuses/retweets_of_me.json"
-		elif sys.argv[2] == "hometimeline":
-			arg = "/1.1/statuses/home_timeline.json"
-		elif sys.argv[2] == "favorites":
-				arg = "/1.1/favorites/list.json"
+logging.basicConfig(filename="tweetoutput.log", level=logging.DEBUG)
 	
-		ARG_URL = API_URL + arg
-	print ARG_URL 
+def make_parser():
+	logging.info ("Constructing parser")
+	parser = argparse.ArgumentParser(description="Interact with twitter api")
+	parser.add_argument("get", help ="GET requests to twitter")
+	return parser
+	
+def main():
+	logging.info("Starting tweetful")
+	parser = make_parser()
+	arguments = parser.parse_args(sys.argv[1:])
+	arguments = vars(arguments)
 	auth = authorization.authorize()
-	response = requests.get(ARG_URL,auth=auth)
-	print json.dumps(response.json(), indent =4)
+	
+	if arguments['get']=='status':
+		status(auth)
+		
+	elif  arguments['get']=='myretweets':
+		myretweets(auth)
+	
+	elif  arguments['get']=='followers':
+		followers(auth)
+	
+	elif  arguments['get']=='favorites':
+		favorites(auth)
+		
 
 if __name__ == "__main__":
-	try: 
-		main()
+	main()
 		
-	except Exception:
-		print 'Type -h for help on arguments to pass'
+	
 	

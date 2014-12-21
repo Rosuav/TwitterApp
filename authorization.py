@@ -58,7 +58,7 @@ def store_credentials(access_token, access_secret):
 		json.dump({"access_token": access_token,                   "access_secret": access_secret}, f)
 
 def get_stored_credentials():
-	""" Try to retriece strored access credentials from a json file"""
+	""" Try to retrieve strored access credentials from a json file"""
 	with open("access.json","r") as f:
 		credentials = json.load(f)
 		return credentials["access_token"], credentials["access_secret"]
